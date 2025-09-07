@@ -1,0 +1,40 @@
+package udp;
+
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.util.Scanner;
+
+public class Sender {
+
+	public Sender() throws Exception {
+		DatagramSocket socket = new DatagramSocket();
+		Scanner keyboard = new Scanner(System.in);
+
+		System.out.print("/127.0.0.1:: -: ");
+		String message = keyboard.nextLine();
+		byte[] buffer = message.getBytes();
+
+		DatagramPacket packet = new DatagramPacket(buffer, buffer.length, InetAddress.getByName("127.0.0.1"), 8080);
+
+		socket.send(packet);
+
+		System.out.println("/127.0.0.1:: - Log:Sent:" + message);
+
+		buffer = new byte[1500];
+		packet = new DatagramPacket(buffer, buffer.length);
+		socket.receive(packet);
+
+		message = new String(buffer).trim();
+		System.out.println("::8080::" + message);
+	}
+
+	public static void main(String[] args) {
+		try {
+			new Sender();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+}
